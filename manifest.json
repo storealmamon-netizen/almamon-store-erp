@@ -1,0 +1,23 @@
+{
+  "name": "المأمون ستور - متجر المأمون الإلكتروني الحديث",
+  "short_name": "المأمون ستور",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0047CC",
+  "theme_color": "#0047CC",
+  "description": "متجر المأمون الإلكتروني الحديث ونظام الإدارة الشامل ERP & POS",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

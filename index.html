@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المأمون ستور | متجر المأمون الإلكتروني الحديث والنظام المحاسبي والإداري الشامل</title>
+  <meta name="description" content="متجر المأمون الإلكتروني الحديث - تعز الحوبان. تسوق أحدث الإلكترونيات، الميازين الإلكترونية، الأجهزة المنزلية، الشاشات، والكمبيوتر مع نظام الإدارة والمحاسبة السحابي.">
+  <meta name="theme-color" content="#0047CC">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/logo.jpg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- الشريط العلوي الموحد للتنقل الفوري بين واجهة متجر العملاء ولوحة الإدارة الشاملة ونقطة البيع والميازين -->
+  <nav class="system-switcher">
+    <div class="switcher-brand">
+      <span>🌐 منظومة المأمون السحابية الموحدة</span>
+      <span class="cloud-badge">
+        <span class="cloud-dot"></span>
+        <span id="cloud-status-text">متصل بالسيرفر الجديد (Supabase Cloud) • 1,937 صنف متزامن لحظياً</span>
+      </span>
+    </div>
+
+    <div class="switcher-tabs">
+      <button class="mode-btn active" data-mode="store" onclick="setMode('store')">
+        🏪 متجر الويب وتطبيق العملاء
+      </button>
+      <button class="mode-btn" data-mode="admin" onclick="setMode('admin')">
+        🖥️ لوحة الإدارة الشاملة (نسخة الويندوز والويب)
+      </button>
+      <button class="mode-btn" data-mode="pos" onclick="setMode('pos')">
+        ⚡ الكاشير ونقاط البيع (F10)
+      </button>
+      <button class="mode-btn" data-mode="scales" onclick="setMode('scales')">
+        ⚖️ الميازين وميزان المراجعة
+      </button>
+    </div>
+
+    <div class="switcher-actions">
+      <select class="curr-select" onchange="setCurrency(this.value)" title="تغيير عملة العرض">
+        <option value="YER">🇾🇪 ريال يمني (YER)</option>
+        <option value="SAR">🇸🇦 ريال سعودي (SAR)</option>
+        <option value="YRS">🇾🇪 يمني جديد (YRS)</option>
+        <option value="USD">🇺🇸 دولار أمريكي (USD)</option>
+      </select>
+      <button class="mode-btn" onclick="openQuickAddProductModal()" title="إضافة صنف فوري يظهر في المتجر">➕ صنف فوري</button>
+      <button class="mode-btn" onclick="toggleTheme()" title="الوضع الليلي / النهاري">🌓</button>
+    </div>
+  </nav>
+
+  <!-- جذر التطبيق الديناميكي -->
+  <div id="app-root"></div>
+
+  <!-- النافذة المنبثقة الشاملة (Modal) -->
+  <div class="modal-backdrop" id="global-modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-box" id="global-modal-box"></div>
+  </div>
+
+  <!-- أزرار المساعد الذكي والواتساب العائمة -->
+  <div class="floating-dock">
+    <button class="fab-btn fab-ai" onclick="openAIAssistantModal()">🤖 المساعد الذكي</button>
+    <a class="fab-btn fab-wa" style="text-decoration:none;" target="_blank" href="https://wa.me/967731002020?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D8%A7%D9%84%D9%85%D8%A3%D9%85%D9%88%D9%86%20%D8%A7%D9%84%D8%A5%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A">💬 واتساب 731002020</a>
+  </div>
+
+  <script src="fallback_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
