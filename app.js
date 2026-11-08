@@ -1244,8 +1244,9 @@ function openQuickAddProductModal() {
         <input type="number" id="new-prod-qty" value="50">
       </div>
       <div class="form-group">
-        <label>رابط صورة الصنف (اختياري)</label>
-        <input type="text" id="new-prod-img" placeholder="اتركه فارغاً لاستخدام شعار المتجر">
+        <label>رفع صورة الصنف مباشرة للسيرفر السحابي (Supabase Storage)</label>
+        <input type="file" id="new-prod-file" accept="image/*" onchange="uploadImageToCloudStorage(this)">
+        <input type="text" id="new-prod-img" placeholder="أو ضع رابط الصورة (يتم تعبئته تلقائياً عند رفع ملف)" style="margin-top:6px;">
       </div>
     </div>
     <div class="form-group" style="margin-bottom:14px;">
@@ -1256,6 +1257,36 @@ function openQuickAddProductModal() {
       🚀 حفظ الصنف في السيرفر السحابي ونشره فوراً في المتجر
     </button>
   `);
+}
+
+async function uploadImageToCloudStorage(inputEl) {
+  const file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  showToast("⏳ جاري رفع صورة الصنف إلى سيرفر التخزين السحابي الخاص بكم (Supabase Storage)...");
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const filename = `prod_${Date.now()}.${ext}`;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/almamon-images/${filename}`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": file.type || "image/jpeg",
+        "x-upsert": "true"
+      },
+      body: file
+    });
+    if (res.ok) {
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/almamon-images/${filename}`;
+      const imgInp = document.getElementById("new-prod-img");
+      if (imgInp) imgInp.value = publicUrl;
+      showToast("✅ تم رفع الصورة وحفظها على سيرفركم السحابي بنجاح!");
+    } else {
+      showToast("⚠️ تعذر رفع الصورة، يمكنك وضع الرابط يدوياً.");
+    }
+  } catch (e) {
+    console.warn(e);
+  }
 }
 
 async function saveNewProductLive() {
