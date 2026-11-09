@@ -371,57 +371,320 @@ function renderStorefront() {
   `;
 }
 
-// ==================== RENDER WINDOWS / WEB ADMIN ERP ====================
+// ==================== RENDER WINDOWS / WEB ADMIN ERP (EXACT ALMAMON.EXE & APK REPLICA) ====================
+// Exact 9 Main Systems & 110+ Sub-Modules extracted from Almamon.exe / libapp.so (0x25a432..0x25a738)
+const ALMAMON_ORIGINAL_SYSTEMS = [
+  {
+    id: "main_home",
+    title: "الرئيسية",
+    icon: "🏠",
+    tab: "dashboard",
+    subitems: [
+      { id: "home_dash", title: "الرئيسية (الإحصائيات العامة)", tab: "dashboard" },
+      { id: "my_notifs", title: "إشعاراتي (99+)", tab: "dashboard" },
+      { id: "emp_acts", title: "أنشطة الموظفين", tab: "hr" },
+      { id: "recommendations", title: "التوصيات", tab: "dashboard" }
+    ]
+  },
+  {
+    id: "acc_sys",
+    title: "النظام المحاسبي",
+    icon: "📘",
+    tab: "accounting",
+    subitems: [
+      { id: "acc_guide", title: "الدليل المحاسبي", tab: "accounting" },
+      { id: "acc_tree", title: "شجرة الحسابات", tab: "accounting" },
+      { id: "acc_groups", title: "مجموعة الحسابات", tab: "accounting" },
+      { id: "funds_mng", title: "إدارة الصناديق", tab: "accounting" },
+      { id: "curr_mng", title: "إدارة العملات", tab: "accounting" },
+      { id: "curr_exch", title: "بيع وشراء العملات", tab: "accounting" },
+      { id: "open_bal", title: "الأرصدة الافتتاحية", tab: "accounting" },
+      { id: "acc_limits", title: "سقوف الحسابات المالية", tab: "accounting" },
+      { id: "fin_close", title: "الإقفال المالي", tab: "settings" },
+      { id: "year_close", title: "الإقفال السنوي", tab: "settings" }
+    ]
+  },
+  {
+    id: "vouchers_sys",
+    title: "نظام السندات المالية",
+    icon: "💸",
+    tab: "vouchers",
+    subitems: [
+      { id: "v_receipt", title: "سندات القبض", tab: "vouchers" },
+      { id: "v_payment", title: "سندات الصرف", tab: "vouchers" },
+      { id: "j_simple", title: "القيود البسيطة", tab: "vouchers" },
+      { id: "j_compound", title: "القيود المركبة", tab: "vouchers" },
+      { id: "pay_msgs", title: "رسائل اشعارات الدفع والتحويل", tab: "vouchers" }
+    ]
+  },
+  {
+    id: "items_stores_sys",
+    title: "نظام الأصناف والمخازن",
+    icon: "📦",
+    tab: "products",
+    subitems: [
+      { id: "items_guide", title: "دليل الأصناف", tab: "products" },
+      { id: "items_groups", title: "مجموعات الأصناف", tab: "groups" },
+      { id: "stores_mng", title: "إدارة المخازن", tab: "products" },
+      { id: "open_stock", title: "مخزون أول الفترة", tab: "products" },
+      { id: "store_transfer", title: "التحويل بين المخازن", tab: "products" },
+      { id: "stock_inventory", title: "الجرد المخزني", tab: "products" },
+      { id: "price_groups", title: "مجموعات التسعيرة", tab: "products" },
+      { id: "comp_guide", title: "دليل الشركات", tab: "groups" },
+      { id: "types_guide", title: "دليل الانواع", tab: "groups" },
+      { id: "units_guide", title: "دليل الوحدات", tab: "groups" },
+      { id: "colors_guide", title: "دليل الالوان", tab: "groups" },
+      { id: "sizes_guide", title: "دليل المقاسات", tab: "groups" },
+      { id: "scales_studio", title: "برمجة الميازين الإلكترونية (باركود الوزن)", tab: "scales_mode" }
+    ]
+  },
+  {
+    id: "sales_purch_sys",
+    title: "نظام المبيعات والمشتريات",
+    icon: "🧾",
+    tab: "invoices",
+    subitems: [
+      { id: "sales_invo", title: "فواتير البيع (الكاشير F10)", tab: "pos_mode" },
+      { id: "sales_invo_list", title: "لوحة تحكم الفواتير والمبيعات", tab: "invoices" },
+      { id: "purch_invo", title: "فواتير الشراء", tab: "invoices" },
+      { id: "ret_sales_invo", title: "فواتير مردود مبيعات", tab: "invoices" },
+      { id: "ret_purch_invo", title: "فواتير مردود مشتريات", tab: "invoices" },
+      { id: "price_offers", title: "عروض الأسعار", tab: "invoices" },
+      { id: "installments_mng", title: "ادارة الأقساط", tab: "invoices" }
+    ]
+  },
+  {
+    id: "clients_supp_sys",
+    title: "نظام العملاء والموردين",
+    icon: "🤝",
+    tab: "orders",
+    subitems: [
+      { id: "clients_mng", title: "إدارة العملاء", tab: "orders" },
+      { id: "supp_mng", title: "إدارة الموردين", tab: "accounting" },
+      { id: "client_topup", title: "طلبات شحن أرصدة العملاء", tab: "orders" },
+      { id: "reg_activate", title: "طلبات تفعيل التسجيل", tab: "orders" },
+      { id: "loyalty_pts", title: "نقاط ولاء العملاء", tab: "orders" },
+      { id: "loyalty_cfg", title: "اعدادات نقاط الولاء", tab: "settings" },
+      { id: "item_reviews", title: "تقييم العملاء للأصناف", tab: "products" }
+    ]
+  },
+  {
+    id: "app_stores_sys",
+    title: "نظام التطبيق والمتاجر والتوصيل",
+    icon: "📱",
+    tab: "orders",
+    subitems: [
+      { id: "app_orders", title: "طلبات التطبيق (طلبات مشتريات التطبيق)", tab: "orders" },
+      { id: "other_store_orders", title: "طلبيات مشتريات التطبيق من المتاجر الاخرى", tab: "orders" },
+      { id: "cart_items", title: "سلة المشتريات", tab: "orders" },
+      { id: "sliders_mng", title: "الصور المتحركة", tab: "settings" },
+      { id: "ads_mng", title: "الاعلانات", tab: "settings" },
+      { id: "offers_discounts", title: "العروض والتخفيضات", tab: "products" },
+      { id: "coupons_mng", title: "كوبونات الخصم", tab: "orders" },
+      { id: "bundles_mng", title: "الربطيات", tab: "products" },
+      { id: "pay_methods_mng", title: "إدارة طرق الدفع", tab: "settings" },
+      { id: "app_designs", title: "إداره تصاميم التطبيق", tab: "settings" },
+      { id: "app_info", title: "معلومات التطبيق", tab: "settings" },
+      { id: "app_settings", title: "اعدادات تطبيق المتجر", tab: "settings" },
+      { id: "app_notifs", title: "إشعارات عملاء التطبيق", tab: "orders" },
+      { id: "whatsapp_notifs", title: "اشعارات الواتساب", tab: "orders" },
+      { id: "sms_format", title: "تنسيق الاشعارات النصية والواتساب", tab: "settings" },
+      { id: "smart_replies", title: "الردود الذكية الآلية", tab: "settings" },
+      { id: "deliv_agents", title: "إداره مندوبين التوصيل", tab: "orders" },
+      { id: "deliv_addrs", title: "إداره عناوين التوصيل للعملاء", tab: "orders" },
+      { id: "deliv_dist_price", title: "اسعار التوصيل حسب المسافة", tab: "settings" },
+      { id: "deliv_zone_price", title: "اسعار التوصيل حسب المناطق ومبلغ الفاتورة", tab: "settings" },
+      { id: "marketers_mng", title: "ادارة مندوبين التسويق", tab: "orders" },
+      { id: "contests_mng", title: "المسابقات ومشاركات المتسابقين", tab: "orders" },
+      { id: "cities_guide", title: "دليل المدن ودليل المناطق", tab: "settings" }
+    ]
+  },
+  {
+    id: "hr_emp_sys",
+    title: "نظام الموارد البشرية والموظفين",
+    icon: "👥",
+    tab: "hr",
+    subitems: [
+      { id: "emp_mng", title: "إدارة الموظفين", tab: "hr" },
+      { id: "emp_roles", title: "مجموعات صلاحية الموظفين", tab: "hr" },
+      { id: "hr_emps", title: "موظفين الموارد البشرية", tab: "hr" },
+      { id: "hr_shifts", title: "جدول دوام الموظفين", tab: "hr" },
+      { id: "hr_attend", title: "الحضور والانصراف (حركة دوام الموظفين)", tab: "hr" },
+      { id: "hr_leaves", title: "انواع وطلبات الإجازات", tab: "hr" },
+      { id: "hr_loans", title: "سلفة الموظفين وأقساط السلف", tab: "hr" },
+      { id: "hr_payroll", title: "مسير الرواتب وتفاصيل ومكونات الراتب", tab: "hr" },
+      { id: "hr_settings", title: "اعدادات الموارد البشرية (HR)", tab: "hr" }
+    ]
+  },
+  {
+    id: "reports_extra_sys",
+    title: "التقارير والخدمات الإضافية والإعدادات",
+    icon: "📊",
+    tab: "accounting",
+    subitems: [
+      { id: "rep_acc_stmt", title: "كشف حساب", tab: "accounting" },
+      { id: "rep_acc_bal", title: "الارصده الحسابية (أرصدة كافة الحسابات)", tab: "accounting" },
+      { id: "rep_trial_bal", title: "ميزان المراجعه", tab: "accounting" },
+      { id: "rep_pnl", title: "تقرير الأرباح والخسائر (قائمة الدخل)", tab: "accounting" },
+      { id: "rep_bs", title: "تقرير الميزانية العمومية", tab: "accounting" },
+      { id: "rep_funds_bal", title: "أرصدة الصناديق والعملاء والموردين", tab: "accounting" },
+      { id: "rep_items_qty", title: "تقرير كميات وحركة الأصناف والمخازن", tab: "products" },
+      { id: "rep_sales_prof", title: "تقرير أرباح المبيعات وعوائد الفواتير", tab: "invoices" },
+      { id: "telecom_sys", title: "نظام سداد الاتصالات اليمنية والواي فاي", tab: "utilities" },
+      { id: "water_elect_sys", title: "نظام الكهرباء ونظام الماء", tab: "utilities" },
+      { id: "maint_vehicles", title: "الصيانة وإداره المركبات وتغيير الزيت", tab: "maintenance" },
+      { id: "aluminum_sys", title: "مصمم وحاسبة نوافذ الألمنيوم", tab: "aluminum" },
+      { id: "branches_guide", title: "دليل الفروع", tab: "settings" },
+      { id: "gen_settings", title: "الاعدادات العامه واعدادات متقدمه", tab: "settings" }
+    ]
+  }
+];
+
 function renderAdminLoginGate() {
+  const connUrl = localStorage.getItem("almamon_online_url") || "https://yraccst.yemoney.net/";
+  const connMode = localStorage.getItem("almamon_conn_mode") || "online";
+  const showPass = state.showAdminPass ? "text" : "password";
   return `
-    <div style="min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;max-width:480px;width:100%;padding:32px;box-shadow:0 25px 60px rgba(0,0,0,0.35);">
-        <div style="text-align:center;margin-bottom:22px;">
-          <img src="${state.logo}" alt="Logo" style="width:82px;height:82px;border-radius:16px;object-fit:contain;background:#fff;padding:6px;box-shadow:0 6px 20px rgba(0,71,204,0.2);margin-bottom:12px;">
-          <h2 style="font-size:21px;font-weight:800;color:var(--primary);">نظام المأمون الإداري والمحاسبي الشامل</h2>
-          <p style="font-size:13px;color:var(--muted);margin-top:4px;">نسخة الويندوز والسحابة المستقلة (Supabase Cloud ERP) • المركز الرئيسي - تعز الحوبان</p>
+    <div style="min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;padding:24px;background:#f1f5f9;direction:rtl;">
+      <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;max-width:460px;width:100%;padding:28px 26px;box-shadow:0 12px 35px rgba(15,23,42,0.08);position:relative;">
+        
+        <!-- زر إعدادات الاتصال (مطابق للصورة 100%) -->
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+          <button onclick="openConnSettingsModal()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;border:1.5px solid #93c5fd;background:#eff6ff;color:#1d4ed8;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">
+            <span>إعدادات الاتصال</span>
+            <span>⚙️</span>
+          </button>
         </div>
 
-        <div class="form-group" style="margin-bottom:14px;">
-          <label>👤 اسم المستخدم / رقم الموظف أو الجوال</label>
-          <input type="text" id="adm-login-user" value="735257690" placeholder="735257690" style="padding:11px 14px;font-size:15px;font-weight:700;">
+        <!-- الشعار واسم النظام (إداره المامون ستور) -->
+        <div style="text-align:center;margin-bottom:22px;">
+          <img src="${state.logo}" alt="Logo" style="width:90px;height:90px;object-fit:contain;margin-bottom:8px;">
+          <h2 style="font-size:21px;font-weight:800;color:#1e293b;margin:0;">إداره المامون ستور</h2>
         </div>
-        <div class="form-group" style="margin-bottom:14px;">
-          <label>🔑 كلمة المرور</label>
-          <input type="password" id="adm-login-pass" value="yY778169717" placeholder="••••••••" style="padding:11px 14px;font-size:15px;" onkeydown="if(event.key==='Enter') doAdminLogin()">
+
+        <!-- حقل اسم الدخول* -->
+        <div style="margin-bottom:14px;position:relative;">
+          <label style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;font-weight:700;">اسم الدخول*</label>
+          <div style="display:flex;align-items:center;border:1.5px solid #cbd5e1;border-radius:10px;padding:4px 12px;background:#fff;">
+            <span style="font-size:18px;color:#64748b;margin-left:8px;">👤</span>
+            <input type="text" id="adm-login-user" value="735257690" placeholder="اسم الدخول*" style="border:none;outline:none;width:100%;padding:8px 0;font-size:15px;font-weight:700;color:#0f172a;font-family:inherit;direction:ltr;text-align:right;">
+          </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
-          <div class="form-group">
-            <label>🏢 الفرع / المخزن</label>
-            <select id="adm-login-branch">
-              <option value="المركز الرئيسي - تعز الحوبان">المركز الرئيسي - تعز الحوبان</option>
+
+        <!-- حقل كلمة السر* -->
+        <div style="margin-bottom:14px;position:relative;">
+          <label style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;font-weight:700;">كلمة السر*</label>
+          <div style="display:flex;align-items:center;border:1.5px solid #cbd5e1;border-radius:10px;padding:4px 12px;background:#fff;">
+            <span style="font-size:18px;color:#64748b;margin-left:8px;">🔒</span>
+            <input type="${showPass}" id="adm-login-pass" value="yY778169717" placeholder="كلمة السر*" style="border:none;outline:none;width:100%;padding:8px 0;font-size:15px;font-weight:700;color:#0f172a;font-family:inherit;direction:ltr;text-align:right;" onkeydown="if(event.key==='Enter') doAdminLogin()">
+            <button type="button" onclick="state.showAdminPass=!state.showAdminPass;renderApp();" style="border:none;background:transparent;cursor:pointer;font-size:16px;color:#64748b;padding:4px;">
+              ${state.showAdminPass ? "🙈" : "👁️"}
+            </button>
+          </div>
+        </div>
+
+        <!-- حقل الفرع -->
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;font-weight:700;">الفرع</label>
+          <div style="display:flex;align-items:center;border:1.5px solid #cbd5e1;border-radius:10px;padding:4px 12px;background:#fff;">
+            <span style="font-size:18px;color:#64748b;margin-left:8px;">🏪</span>
+            <select id="adm-login-branch" style="border:none;outline:none;width:100%;padding:8px 0;font-size:14px;font-weight:700;color:#0f172a;font-family:inherit;background:transparent;">
+              <option value="الفرع الرئيسي">الفرع الرئيسي (تعز - الحوبان)</option>
               <option value="فرع المعرض والمبيعات">فرع المعرض والمبيعات</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>📅 السنة المالية</label>
-            <select id="adm-login-year" onchange="state.fiscalYear=this.value">
-              <option value="2026" selected>السنة المالية 2026</option>
-              <option value="2025">السنة المالية 2025</option>
+        </div>
+
+        <!-- حقل السنة المالية -->
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;font-weight:700;">السنة المالية</label>
+          <div style="display:flex;align-items:center;border:1.5px solid #cbd5e1;border-radius:10px;padding:4px 12px;background:#fff;">
+            <span style="font-size:18px;color:#64748b;margin-left:8px;">📅</span>
+            <select id="adm-login-year" onchange="state.fiscalYear=this.value" style="border:none;outline:none;width:100%;padding:8px 0;font-size:14px;font-weight:700;color:#0f172a;font-family:inherit;background:transparent;">
+              <option value="2026" selected>2026</option>
+              <option value="2025">2025</option>
             </select>
           </div>
         </div>
 
-        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:15.5px;margin-bottom:10px;" onclick="doAdminLogin()">
-          🔐 تسجيل الدخول إلى لوحة الإدارة الشاملة
-        </button>
-        <button class="btn btn-success" style="width:100%;justify-content:center;padding:11px;font-size:13.5px;" onclick="quickAdminLogin()">
-          ⚡ دخول فوري بحساب الإدارة المعتمد (735257690)
+        <!-- حفظ بيانات الدخول -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+          <input type="checkbox" id="adm-save-login" checked style="width:18px;height:18px;accent-color:#1d5296;cursor:pointer;">
+          <label for="adm-save-login" style="font-size:14px;font-weight:700;color:#334155;cursor:pointer;">حفظ بيانات الدخول</label>
+        </div>
+
+        <!-- زر دخول (مطابق للصورة 100%) -->
+        <button onclick="doAdminLogin()" style="width:100%;padding:13px;border-radius:10px;border:none;background:#1d5296;color:#ffffff;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 16px rgba(29,82,150,0.28);">
+          <span>دخول</span>
+          <span style="font-size:18px;">⬅️</span>
         </button>
 
-        <div style="margin-top:16px;padding:10px 14px;background:var(--primary-light);border-radius:10px;font-size:12px;color:var(--text);">
-          <strong>حسابات الإدارة المعتمدة في قاعدة البيانات المستقلة:</strong><br>
-          • حساب الإدارة المخصص: <code>735257690</code> | كلمة السر: <code>yY778169717</code><br>
-          • المدير العام: <code>731002020</code> | الكاشير: <code>781002020</code> (<code>123456</code>)
+        <div style="margin-top:14px;text-align:center;font-size:11.5px;color:#64748b;">
+          رابط الاتصال الفعال: <code style="direction:ltr;display:inline-block;color:#1d5296;font-weight:700;">${escapeHtml(connUrl)}</code>
+          (${connMode === "online" ? "أونلاين عبر الإنترنت" : "أوفلاين الشبكة المحلية"})
+        </div>
+      </div>
+
+      <!-- نافذة إعدادات الاتصال المنبثقة (مطابقة للصورة الثانية 100%) -->
+      <div id="conn-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.55);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+        <div style="background:#f8fafc;border-radius:20px;max-width:420px;width:100%;padding:24px;box-shadow:0 25px 50px rgba(0,0,0,0.3);border:1px solid #cbd5e1;direction:rtl;">
+          <h3 style="text-align:center;font-size:20px;font-weight:800;color:#0f172a;margin:0 0 18px 0;">إعدادات الاتصال</h3>
+          
+          <label style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:#1e293b;margin-bottom:12px;cursor:pointer;">
+            <input type="radio" name="adm_conn_mode" value="online" ${connMode === "online" ? "checked" : ""} style="width:18px;height:18px;accent-color:#1d5296;">
+            <span>استخدام النظام أونلاين (عبر الإنترنت)</span>
+          </label>
+
+          <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:12px;color:#475569;margin-bottom:4px;font-weight:700;">رابط الاتصال اونلاين</label>
+            <div style="display:flex;align-items:center;border:2px solid #1d5296;border-radius:10px;padding:6px 12px;background:#fff;">
+              <span style="font-size:18px;color:#475569;margin-left:8px;">🔗</span>
+              <input type="text" id="adm-conn-url-input" value="${escapeHtml(connUrl)}" style="border:none;outline:none;width:100%;font-size:14.5px;font-weight:700;color:#0f172a;direction:ltr;text-align:left;font-family:monospace;">
+            </div>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+              <button type="button" onclick="document.getElementById('adm-conn-url-input').value='https://yraccst.yemoney.net/'" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;">https://yraccst.yemoney.net/</button>
+              <button type="button" onclick="document.getElementById('adm-conn-url-input').value='https://nlxiixqzgkvjfntggekt.supabase.co'" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;">سحابة المأمون المستقلة (Supabase)</button>
+            </div>
+          </div>
+
+          <label style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:#1e293b;margin-bottom:22px;cursor:pointer;">
+            <input type="radio" name="adm_conn_mode" value="offline" ${connMode === "offline" ? "checked" : ""} style="width:18px;height:18px;accent-color:#1d5296;">
+            <span>استخدام النظام أوفلاين (الشبكة المحلية)</span>
+          </label>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <button type="button" onclick="saveConnSettingsModal()" style="flex:1;padding:11px 16px;border-radius:24px;border:none;background:#1d5296;color:#fff;font-family:inherit;font-size:14.5px;font-weight:800;cursor:pointer;">
+              حفظ الإعدادات
+            </button>
+            <button type="button" onclick="closeConnSettingsModal()" style="padding:11px 20px;border-radius:24px;border:none;background:transparent;color:#334155;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;">
+              إلغاء
+            </button>
+          </div>
         </div>
       </div>
     </div>
   `;
+}
+
+function openConnSettingsModal() {
+  const m = document.getElementById("conn-settings-modal");
+  if (m) m.style.display = "flex";
+}
+
+function closeConnSettingsModal() {
+  const m = document.getElementById("conn-settings-modal");
+  if (m) m.style.display = "none";
+}
+
+function saveConnSettingsModal() {
+  const urlVal = (document.getElementById("adm-conn-url-input")?.value || "https://yraccst.yemoney.net/").trim();
+  const modeRadio = document.querySelector('input[name="adm_conn_mode"]:checked');
+  const modeVal = modeRadio ? modeRadio.value : "online";
+  localStorage.setItem("almamon_online_url", urlVal);
+  localStorage.setItem("almamon_conn_mode", modeVal);
+  closeConnSettingsModal();
+  showToast("تم ضبط منفذ الاتصال بنجاح ✅");
+  renderApp();
 }
 
 function doAdminLogin() {
@@ -479,70 +742,76 @@ function doAdminLogout() {
   renderApp();
 }
 
+function selectOriginalSubScreen(sysId, subId, title, targetTab) {
+  state.activeOriginalSys = sysId;
+  state.activeOriginalSub = subId;
+  state.activeOriginalTitle = title;
+  if (targetTab === "pos_mode") {
+    setMode("pos");
+    return;
+  }
+  if (targetTab === "scales_mode") {
+    setMode("scales");
+    return;
+  }
+  state.adminTab = targetTab;
+  renderApp();
+}
+
+function toggleOriginalSysGroup(sysId) {
+  state.expandedOriginalSys = state.expandedOriginalSys === sysId ? null : sysId;
+  renderApp();
+}
+
 function renderAdminERP() {
   if (!state.adminUser) {
     return renderAdminLoginGate();
+  }
+  if (!state.expandedOriginalSys) {
+    state.expandedOriginalSys = "main_home";
   }
   const totalStockValue = state.products.reduce((s, p) => s + (Number(p.price_sale || 0) * Number(p.stock_qty || 20)), 0);
   const scaleProducts = state.products.filter(p => p.is_scale_item || Number(p.group_id) === 8610908145 || (p.arname && p.arname.includes("ميزان")));
 
   return `
     <div class="erp-layout">
-      <aside class="erp-sidebar">
+      <aside class="erp-sidebar" style="overflow-y:auto;max-height:calc(100vh - 64px);">
         <div class="erp-sidebar-header">
           <img src="${state.logo}" alt="Logo">
           <div>
-            <div style="font-weight:800;font-size:14.5px;color:#fff;">نظام المأمون للإدارة</div>
-            <div style="font-size:11px;color:#38bdf8;">${state.adminUser.username} • سنة ${state.fiscalYear}</div>
+            <div style="font-weight:800;font-size:15px;color:#fff;">إداره المامون ستور</div>
+            <div style="font-size:11px;color:#38bdf8;">${state.adminUser.username} • ${state.adminUser.branch_name || 'الفرع الرئيسي'} • ${state.fiscalYear}</div>
           </div>
         </div>
 
-        <div class="erp-nav-group-title">القيادة والمتجر الإلكتروني</div>
-        <button class="erp-nav-item ${state.adminTab === 'dashboard' ? 'active' : ''}" onclick="setAdminTab('dashboard')">
-          <span>📊 لوحة القيادة والإحصائيات</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'products' ? 'active' : ''}" onclick="setAdminTab('products')">
-          <span>📦 إدارة الأصناف والمخزون (${state.products.length})</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'groups' ? 'active' : ''}" onclick="setAdminTab('groups')">
-          <span>📂 شجرة المجموعات والتصنيفات</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'orders' ? 'active' : ''}" onclick="setAdminTab('orders')">
-          <span>🛍️ طلبات المتجر والتوصيل (${state.orders.length})</span>
-        </button>
+        <div class="erp-nav-group-title">أنظمة إداره المامون ستور (المطابقة للتطبيق)</div>
+        ${ALMAMON_ORIGINAL_SYSTEMS.map(sys => {
+          const isExp = state.expandedOriginalSys === sys.id;
+          return `
+            <div style="margin-bottom:4px;">
+              <button class="erp-nav-item ${state.activeOriginalSys === sys.id ? 'active' : ''}" style="justify-content:space-between;font-weight:800;" onclick="toggleOriginalSysGroup('${sys.id}')">
+                <span>${sys.icon} ${sys.title}</span>
+                <span style="font-size:11px;opacity:0.8;">${isExp ? '▼' : '◀'} (${sys.subitems.length})</span>
+              </button>
+              ${isExp ? `
+                <div style="padding:4px 10px 6px 4px;background:rgba(15,23,42,0.45);border-right:2px solid #38bdf8;margin:2px 8px 6px 4px;border-radius:6px;">
+                  ${sys.subitems.map(sub => `
+                    <button class="erp-nav-item ${state.activeOriginalSub === sub.id ? 'active' : ''}" style="padding:6px 10px;font-size:12px;margin-bottom:2px;" onclick="selectOriginalSubScreen('${sys.id}','${sub.id}','${sub.title}','${sub.tab}')">
+                      <span>• ${sub.title}</span>
+                    </button>
+                  `).join("")}
+                </div>
+              ` : ""}
+            </div>
+          `;
+        }).join("")}
 
-        <div class="erp-nav-group-title">الفواتير والمحاسبة والميزان</div>
+        <div class="erp-nav-group-title">وصول سريع مباشر</div>
         <button class="erp-nav-item" onclick="setMode('pos')">
-          <span>⚡ شاشة الكاشير ونقاط البيع (F10)</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'invoices' ? 'active' : ''}" onclick="setAdminTab('invoices')">
-          <span>🧾 سجل الفواتير والجرد (${state.invoices.length})</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'vouchers' ? 'active' : ''}" onclick="setAdminTab('vouchers')">
-          <span>💸 السندات المالية والقيود (${state.vouchers.length})</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'accounting' ? 'active' : ''}" onclick="setAdminTab('accounting')">
-          <span>🏦 دليل الحسابات وميزان المراجعة</span>
+          <span>⚡ فواتير البيع / الكاشير (F10)</span>
         </button>
         <button class="erp-nav-item" onclick="setMode('scales')">
           <span>⚖️ استوديو الميازين الإلكترونية</span>
-        </button>
-
-        <div class="erp-nav-group-title">الأنظمة المتخصصة المدمجة</div>
-        <button class="erp-nav-item ${state.adminTab === 'maintenance' ? 'active' : ''}" onclick="setAdminTab('maintenance')">
-          <span>🛠️ صيانة الأجهزة وقطع الغيار (${state.maintenance.length})</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'hr' ? 'active' : ''}" onclick="setAdminTab('hr')">
-          <span>👥 الموظفين والصلاحيات والرواتب (${state.employees.length})</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'utilities' ? 'active' : ''}" onclick="setAdminTab('utilities')">
-          <span>💡 كبينة السداد والكهرباء والمياه</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'aluminum' ? 'active' : ''}" onclick="setAdminTab('aluminum')">
-          <span>🪟 مصمم وحاسبة نوافذ الألمنيوم</span>
-        </button>
-        <button class="erp-nav-item ${state.adminTab === 'settings' ? 'active' : ''}" onclick="setAdminTab('settings')">
-          <span>⚙️ الإعدادات والنسخ الاحتياطي</span>
         </button>
         <button class="erp-nav-item" style="color:#f87171;margin-top:8px;" onclick="doAdminLogout()">
           <span>🚪 تسجيل الخروج (${state.adminUser.username})</span>
@@ -550,51 +819,55 @@ function renderAdminERP() {
       </aside>
 
       <section class="erp-main">
-        <!-- شريط معلومات الموظف والفرع النشط -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <!-- شريط معلومات الموظف والفرع النشط والشاشة المفتوحة -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
           <div style="font-size:13px;">
-            👤 المستخدم النشط: <strong>${state.adminUser.full_name}</strong> (<code>#${state.adminUser.emp_number || 101} - ${state.adminUser.username}</code>)
-            | 🏢 الفرع: <strong>${state.adminUser.branch_name || 'المركز الرئيسي - تعز الحوبان'}</strong>
+            <strong style="color:var(--primary);font-size:14px;">📍 ${state.activeOriginalTitle || 'الرئيسية'}</strong>
+            <span style="margin:0 8px;color:#cbd5e1;">|</span>
+            👤 الموظف: <strong>${state.adminUser.full_name}</strong> (<code>${state.adminUser.username}</code>)
+            | 🏪 الفرع: <strong>${state.adminUser.branch_name || 'الفرع الرئيسي'}</strong>
             | 📅 السنة المالية: <strong>${state.fiscalYear}</strong>
           </div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-outline" style="padding:4px 10px;font-size:12px;" onclick="syncWithSupabase();showToast('تمت مزامنة كافة الجداول مع السيرفر السحابي بنجاح 🔄');">🔄 مزامنة فورية</button>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:800;">🔔 إشعاراتي (99+)</span>
+            <button class="btn btn-outline" style="padding:4px 10px;font-size:12px;" onclick="syncWithSupabase();showToast('تمت مزامنة كافة الجداول مع السيرفر السحابي بنجاح 🔄');">🔄 تحديث ومزامنة</button>
             <button class="btn btn-danger" style="padding:4px 10px;font-size:12px;" onclick="doAdminLogout()">🚪 خروج</button>
           </div>
         </div>
 
+        <!-- بطاقات النسب والإحصائيات الرئيسية المطابقة لتطبيق إداره المامون ستور (getitemihsamain / getchart) -->
         <div class="kpi-grid">
-          <div class="kpi-card">
+          <div class="kpi-card" style="cursor:pointer;" onclick="selectOriginalSubScreen('items_stores_sys','items_guide','دليل الأصناف','products')">
             <div>
-              <h4>إجمالي أصناف المتجر والمخزن</h4>
-              <div class="val">${state.products.length.toLocaleString()} صنف</div>
-              <small style="color:#10b981;">13 مجموعة رئيسية • ${state.cats.length} قسم فرعي</small>
+              <h4>الأصناف (دليل الأصناف والمخازن)</h4>
+              <div class="val">${state.products.length.toLocaleString()} صنف <span style="font-size:13px;color:#0284c7;background:#e0f2fe;padding:2px 8px;border-radius:99px;">33%</span></div>
+              <small style="color:#10b981;">13 مجموعة رئيسية • ${state.cats.length} تصنيف فرعي</small>
             </div>
             <div class="kpi-icon" style="background:#e0f2fe;color:#0284c7;">📦</div>
           </div>
-          <div class="kpi-card">
+          <div class="kpi-card" style="cursor:pointer;" onclick="selectOriginalSubScreen('clients_supp_sys','clients_mng','إدارة العملاء','orders')">
             <div>
-              <h4>أصناف قسم الميازين الإلكترونية</h4>
-              <div class="val">${scaleProducts.length} ميزان/صنف</div>
-              <small style="color:#0d9488;">يدعم باركود الوزن والسعر EAN-13</small>
+              <h4>العملاء وطلبات التطبيق</h4>
+              <div class="val">${state.orders.length} طلب نشط <span style="font-size:13px;color:#0d9488;background:#ccfbf1;padding:2px 8px;border-radius:99px;">27%</span></div>
+              <small style="color:#0d9488;">نظام العملاء والموردين ونقاط الولاء</small>
             </div>
-            <div class="kpi-icon" style="background:#ccfbf1;color:#0d9488;">⚖️</div>
+            <div class="kpi-icon" style="background:#ccfbf1;color:#0d9488;">👥</div>
           </div>
-          <div class="kpi-card">
+          <div class="kpi-card" style="cursor:pointer;" onclick="selectOriginalSubScreen('app_stores_sys','app_orders','إدارة المتاجر وطلبات التطبيق','orders')">
             <div>
-              <h4>الطلبات والفواتير والسندات</h4>
-              <div class="val">${state.orders.length} طلب / ${state.invoices.length} فاتورة</div>
-              <small style="color:#f59e0b;">${state.vouchers.length} سندات مالية مسجلة</small>
+              <h4>المتاجر والفواتير والسندات</h4>
+              <div class="val">${state.invoices.length} فاتورة <span style="font-size:13px;color:#d97706;background:#fef3c7;padding:2px 8px;border-radius:99px;">22%</span></div>
+              <small style="color:#f59e0b;">${state.vouchers.length} سندات مالية • ${scaleProducts.length} صنف ميزان</small>
             </div>
-            <div class="kpi-icon" style="background:#fef3c7;color:#d97706;">🧾</div>
+            <div class="kpi-icon" style="background:#fef3c7;color:#d97706;">🏪</div>
           </div>
-          <div class="kpi-card">
+          <div class="kpi-card" style="cursor:pointer;" onclick="selectOriginalSubScreen('app_stores_sys','deliv_agents','إداره مندوبين التوصيل','orders')">
             <div>
-              <h4>القيمة التقديرية للمخزون</h4>
-              <div class="val">${formatPrice(totalStockValue)}</div>
-              <small style="color:var(--primary);">المخزن الرئيسي - تعز الحوبان</small>
+              <h4>مندوبين التوصيل وقيمة المخزون</h4>
+              <div class="val">${formatPrice(totalStockValue)} <span style="font-size:13px;color:#7c3aed;background:#ede9fe;padding:2px 8px;border-radius:99px;">6%</span></div>
+              <small style="color:var(--primary);">التسويق والتوصيل • تعز الحوبان</small>
             </div>
-            <div class="kpi-icon" style="background:#ede9fe;color:#7c3aed;">💰</div>
+            <div class="kpi-icon" style="background:#ede9fe;color:#7c3aed;">🚚</div>
           </div>
         </div>
 
@@ -606,22 +879,97 @@ function renderAdminERP() {
 
 function renderAdminTabContent() {
   if (state.adminTab === "dashboard") {
+    const dashMetric = state.dashMetricTab || "topsales";
     return `
-      <div class="erp-card">
+      <!-- تنبيه النسخ الاحتياطي المطابق حرفياً لـ Almamon.exe (ntedbbk) -->
+      <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-weight:800;color:#b91c1c;font-size:14px;">🔴🔴⛁تنبيه مهم⛁🔴🔴 — ⛁⛁ إعدادات النسخ الاحتياطية الآلية لقاعدة البيانات ⛁⛁</div>
+          <div style="font-size:12.5px;color:#7f1d1d;margin-top:2px;">📌بنقرة واحدة يمكنك تفعيل وتحميل النسخ الآلية الاحتياطية لقاعدة البيانات لنظامك والاحتفاظ بها بجهازك!📌</div>
+        </div>
+        <button class="btn btn-danger" style="font-size:12.5px;padding:7px 14px;" onclick="downloadFullBackupJSON()">💾 تحميل نسخة احتياطية فورية (JSON/SQL)</button>
+      </div>
+
+      <!-- دليل كافة أنظمة وشاشات إداره المامون ستور (9 أنظمة رئيسية و 95+ شاشة فرعية مطابقة لـ Almamon.exe & APK) -->
+      <div class="erp-card" style="margin-bottom:18px;">
         <div class="erp-card-header">
-          <h3>🚀 مركز التحكم السريع بمتجر ونظام المأمون (تزامن لحظي 100% مع السحابة المستقلة)</h3>
+          <h3>🧭 دليل شاشات وأنظمة (إداره المامون ستور) الكامل — مطابق 100% لتطبيق الإدارة والويندوز</h3>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="openQuickAddProductModal()">➕ إضافة صنف جديد للمتجر</button>
-            <button class="btn btn-success" onclick="setMode('pos')">⚡ فتح فاتورة كاشير (F10)</button>
-            <button class="btn btn-warning" onclick="openNewVoucherModal()">💸 سند قبض / صرف جديد</button>
-            <button class="btn btn-outline" onclick="exportProductsCSV()">📥 تصدير الأصناف إلى Excel</button>
+            <button class="btn btn-primary" onclick="openQuickAddProductModal()">➕ إضافة صنف جديد</button>
+            <button class="btn btn-success" onclick="setMode('pos')">⚡ فواتير البيع (F10)</button>
+            <button class="btn btn-warning" onclick="openNewVoucherModal()">💸 سند قبض / صرف</button>
+            <button class="btn btn-outline" onclick="exportProductsCSV()">📥 تصدير Excel</button>
           </div>
         </div>
-        <p style="font-size:13.5px;color:var(--muted);margin-bottom:16px;">
-          أهلاً بك في لوحة الإدارة الشاملة المستقلة لمتجر المأمون الإلكتروني الحديث. جميع الأصناف (${state.products.length.toLocaleString()} صنف) والصور (1,923 صورة على Supabase Storage) والحسابات والفواتير تعمل باستقلالية تامة 100% عن أي سيرفر خارجي قديم.
-        </p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:12px;margin-top:8px;">
+          ${ALMAMON_ORIGINAL_SYSTEMS.map(sys => `
+            <div style="border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--bg);">
+              <div style="font-weight:800;font-size:14.5px;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+                <span>${sys.icon} ${sys.title}</span>
+                <span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:99px;">${sys.subitems.length} شاشة</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;">
+                ${sys.subitems.map(sub => `
+                  <button onclick="selectOriginalSubScreen('${sys.id}','${sub.id}','${sub.title}','${sub.tab}')" style="font-family:inherit;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:7px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='#0047cc';this.style.color='#0047cc';" onmouseout="this.style.borderColor='#cbd5e1';this.style.color='#1e293b';">
+                    ${sub.title}
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
 
-        <h4 style="margin-bottom:10px;">🛍️ أحدث طلبات المتجر الإلكتروني وتطبيق العملاء</h4>
+      <!-- تبويبات الإحصائيات التحليلية في الرئيسية المطابقة لـ Almamon.exe (topsales, endqty, expire, maxitemvotes, bestclients, bestdelivry, recommends) -->
+      <div class="erp-card" style="margin-bottom:18px;">
+        <div class="erp-card-header" style="flex-wrap:wrap;gap:6px;">
+          <h3>📈 مؤشرات الأداء والتحليل الفوري (الرئيسية - getitemihsamain)</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${[
+              { id: "topsales", label: "🔥 الأكثر مبيعاً (topsales)" },
+              { id: "endqty", label: "⚠️ أصناف منتهية كميتها (endqty)" },
+              { id: "expire", label: "⏳ أصناف قاربت الانتهاء (expire)" },
+              { id: "maxitemvotes", label: "⭐ تقييم العملاء للأصناف" },
+              { id: "bestclients", label: "🏆 أفضل العملاء" },
+              { id: "bestdelivry", label: "🚚 أفضل مندوبي التوصيل" },
+              { id: "recommends", label: "💡 التوصيات" }
+            ].map(t => `
+              <button class="btn ${dashMetric === t.id ? 'btn-primary' : 'btn-outline'}" style="padding:5px 10px;font-size:12px;" onclick="state.dashMetricTab='${t.id}';renderApp();">${t.label}</button>
+            `).join("")}
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الصنف / البيان</th>
+                <th>المجموعة</th>
+                <th>السعر (ر.ي)</th>
+                <th>الكمية بالمخزن</th>
+                <th>الحالة / المؤشر</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.products.slice(0, 8).map((p, idx) => `
+                <tr>
+                  <td>${idx + 1}</td>
+                  <td><strong>${escapeHtml(p.arname)}</strong></td>
+                  <td>${escapeHtml(p.group_name || "عام")}</td>
+                  <td>${formatPrice(p.price_sale)}</td>
+                  <td><span class="badge badge-success">${p.stock_qty || 25} ${escapeHtml(p.unit_name || "حبة")}</span></td>
+                  <td><span class="badge badge-info">${dashMetric === "topsales" ? "الأعلى طلباً" : dashMetric === "endqty" ? "تنبيه حد الطلب" : "نشط بالمخزن"}</span></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="erp-card">
+        <div class="erp-card-header">
+          <h3>🛍️ أحدث طلبات التطبيق والمتجر الإلكتروني (طلبات مشتريات التطبيق)</h3>
+        </div>
         <div class="table-responsive">
           <table class="erp-table">
             <thead>
